@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Providing Prescient Postings for Peckish Pythonistas</title>
+
+		<meta name="description" content="A talk on writing one's first Slack integration">
+		<meta name="author" content="Aru Sahni">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/humangeo-light.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+		<style>
+		.reveal .middle-aligned,
+	    .reveal .middle-aligned img	{
+			vertical-align: middle;
+		}
+
+		.reveal p.hero-text {
+			font-size: 2.0em;
+		}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Food Truck Tracking in Slack</h1>
+					<h3>Providing Prescient Postings for Peckish Pythonistas</h3>
+					<p>
+						<small>A talk by <a href="http://arusahni.net">Aru Sahni</a> (<a href="http://twitter.com/IAmAru">@IAmAru</a>)</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Problem</h2>
+					<ol>
+						<li class="fragment roll-in">Developers need food.</li>
+						<li class="fragment roll-in">Food comes from trucks.</li>
+						<li class="fragment roll-in">Trucks are poorly aggregated.</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Solution?</h2>
+					<ol>
+						<li>Food truck tracking sites!</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Problem</h2>
+					<ul>
+						<li>They suck.</li>
+						<li>Many clicks, no deep linking.</li>
+						<li>Devs spend a lot of time independently looking up foodtruck listings.</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Slack</h2>
+					<img src="resources/slack.png" alt="Slack screenshot" />
+				</section>
+				<section>
+					<h2>Slack</h2>
+					<ul>
+						<li>Web-based messaging client.</li>
+						<li>Similar to IRC w/channels.</li>
+						<li>Collaborative features baked in.</li>
+						<li><strong>Extensible.</strong></li>
+					</ul>
+				</section>
+				<section>
+					<p class="hero-text middle-aligned"><img src="resources/foodtruck.png" height=200 alt="Food truck illustration" class="borderless" /> + <img src="resources/slack-logo.png" alt="Slack logo" height=200 class="borderless"/> = ?</p>
+				</section>
+				<section>
+					<h1>Questions?</h1>
+					<ul>
+						<li><a href="http://thehumangeo.com">HumanGeo</a> - We're always looking for talented Python developers.</li>
+					</ul>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: "linear", //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
