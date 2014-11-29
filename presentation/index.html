@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="css/theme/humangeo-light.css" id="theme">
 
 		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="lib/css/github.css">
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
@@ -71,16 +71,14 @@
 
 				<section>
 					<h2>Solution?</h2>
-					<ol>
-						<li>Food truck tracking sites!</li>
-					</ol>
+                    <p>Food truck tracking sites!</p>
 				</section>
 				<section>
 					<h2>Problem</h2>
 					<ul>
 						<li>They suck.</li>
 						<li>Many clicks, no deep linking.</li>
-						<li>Devs spend a lot of time independently looking up foodtruck listings.</li>
+						<li>Coworkers spend a lot of time independently looking up foodtruck listings.</li>
 					</ul>
 				</section>
 				<section>
@@ -93,6 +91,7 @@
 						<li>Web-based messaging client.</li>
 						<li>Similar to IRC w/channels.</li>
 						<li>Collaborative features baked in.</li>
+						<li><strong>All our devs use it.</strong></li>
 						<li><strong>Extensible.</strong></li>
 					</ul>
 				</section>
@@ -100,14 +99,133 @@
 					<p class="hero-text middle-aligned"><img src="resources/foodtruck.png" height=200 alt="Food truck illustration" class="borderless" /> + <img src="resources/slack-logo.png" alt="Slack logo" height=200 class="borderless"/> = ?</p>
 				</section>
 				<section>
+					<h2>A solution</h2>
+					<ol>
+						<li>A developer executes a food truck command within Slack.</li>
+						<li>Slack queries a webservice for food trucks in the area.</li>
+						<li>Slack displays the results in a public channel so others don't have to ask.</li>
+					</ol>
+				</section>
+				<section>
+					<h2>Getting a list of food trucks</h2>
+					<p>No formal API available.<br /><br />
+					No problem - scraping to the rescue.</p>
+				</section>
+				<section>
+                    <img src="resources/greendale-thumbs-up.gif" alt="Thumbs up for Greendale!" class="borderless"/>
+					<h3>PSA: Be respectful to the sites you scrape.</h3>
+				</section>
+				<section>
+					<h2>Scraping with Python</h2>
+					<ol>
+						<li>Heavy duty? <a href="http://scrapy.org/">Scrapy</a>.</li>
+						<li>Everything else? Roll your own.</li>
+					</ol>
+				</section>
+				<section>
+					<section>
+						<h2>A custom scraper</h2>
+						<ol>
+							<li>Python</li>
+							<li><a href="http://docs.python-requests.org/en/latest/">Requests</a></li>
+							<li><a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a></li>
+						</ol>
+					</section>
+					<section>
+                        <h2>Your first request</h2>
+						<pre><code>
+import requests
+
+URL = "http://mytrucksite.com/"
+response = requests.get(URL)
+# Print the full page markup
+print(response.text)
+
+						</code></pre>
+					</section>
+                    <section>
+                        <h2>Output</h2>
+                        <pre><code class="html">
+&lt;html&gt;
+&lt;body&gt;
+<ul>
+    <li>District Taco</li>
+    <li>Pho-bachi</li>
+    <li>Astro Fried Chicken and Doughnuts</li>
+</ul>
+&lt;/body&gt;
+&lt;/html&gt;
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Getting fancy</h2>
+                        <pre><code>
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(response.text)
+trucks = soup.find_all("li")
+for truck in trucks:
+    print(truck.text)
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Output</h2>
+                        <pre><code>
+District Taco
+Pho-batchi
+Astro Fried Chicken and Dougnuts
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>Putting it all together</h2>
+                        <pre><code>
+import requests
+import BeautifulSoup
+
+URL = "http://arusahni.net/slack-demo/listing.html"
+
+def get_trucks():
+    response = requests.get(URL)
+    soup = BeautifulSoup(response.text)
+    trucks = soup.find_all("li")
+    return [truck.text for truck in trucks]
+                        </code></pre>
+                    </section>
+				</section>
+                <section>
+                    <section>
+                        <h2>Slacking off</h2>
+                        <p>Integrating with Slack is straightforward.</p>
+                        <ol>
+                            <li>Slash-command to script</li>
+                            <li>Script to Slack</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>Putting the script online</h2>
+                        <p>
+                    </section>
+                    <section>
+                        <h2>Slash-command to script</h2>
+                        <img src="resources/slashcommand.png" alt="The slash-command prompt in Slack." />
+                        <pre>
+token=vPpj7lO3xdOMK18EDDQWR5Bi
+team_id=T0001
+channel_id=C2147483705
+channel_name=<name>
+user_id=<user_id>
+user_name=<user_name>
+command=/foodtrucks
+text=<optional parameters>
+                        </pre>
+                    </section>
+                </section>
+				<section>
 					<h1>Questions?</h1>
 					<ul>
 						<li><a href="http://thehumangeo.com">HumanGeo</a> - We're always looking for talented Python developers.</li>
 					</ul>
 				</section>
-
 			</div>
-
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
@@ -122,6 +240,7 @@
 				progress: true,
 				history: true,
 				center: true,
+                maxScale: 1.5,
 
 				transition: "linear", //Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
