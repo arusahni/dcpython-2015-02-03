@@ -254,6 +254,39 @@ def get_trucks():
 					</section>
 				</section>
 				<section>
+					<section>
+						<h2>Integrating with Heroku</h2>
+						<ul>
+							<li>Hosted SaaS platform.</li>
+							<li>Allows you to scale up and drop in new components.</li>
+							<li>Uses git for code deployment</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Add pre-requisites</h2>
+						<pre><code>
+# Install server
+pip install gunicorn
+
+# Capture dependencies
+pip freeze > requirements.txt
+
+# Specify Python version
+echo "python-3.4.1" > runtime.txt
+						</code></pre>
+					</section>
+					<section>
+						<h2>Get things going</h2>
+						<pre><code>
+# Instantiate a Heroku project and tie your repo to it
+heroku create --http-git
+
+# Push your master branch to Heroku
+git push heroku master
+						</code></pre>
+					</section>
+				</section>
+				<section>
 					<h1>Questions?</h1>
 					<ul>
 						<li><a href="http://thehumangeo.com">HumanGeo</a> - We're always looking for talented Python developers.</li>
