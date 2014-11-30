@@ -183,7 +183,7 @@ from bs4 import BeautifulSoup
 
 URL = "http://arusahni.net/slack-demo/listing.html"
 
-def get_trucks():
+def scrape_food_trucks():
     response = requests.get(URL)
     soup = BeautifulSoup(response.text)
     trucks = soup.find_all("li")
@@ -211,27 +211,21 @@ def get_trucks():
 						<h2>Convert the script to a webapp: Boilerplate</h2>
 						<pre><code>
 from flask import Flask
-import requests
-from bs4 import BeautifulSoup
 
 APP = Flask(__name__)
 
 URL = "http://arusahni.net/slack-demo/listing.html"
 
-def get_trucks():
-    response = requests.get(URL)
-    soup = BeautifulSoup(response.text)
-    trucks = soup.find_all("li")
-    return [truck.text for truck in trucks]
-
 @APP.route("/trucks")
 def get_trucks():
-	return ", ".join(get_trucks)
+	return ", ".join(scrape_food_trucks())
 						</code></pre>
 					</section>
 					<section>
+						<img src="resources/slashcommand-details.png" alt="The slash-command prompt in Slack." />
+					</section>
+					<section>
 						<h2>Slash-command to script</h2>
-						<img src="resources/slashcommand.png" alt="The slash-command prompt in Slack." />
 						<pre><code>
 token=vPpj7lO3xdOMK18EDDQWR5Bi
 team_id=T0001
@@ -244,7 +238,7 @@ text=&lt;optional parameters&gt;
 						</code></pre>
 					</section>
 					<section>
-						<h2>Convert the script to a webapp: Plug and play</h2>
+						<h2>Guard against bad requests</h2>
 						<pre><code>
 from flask import Flask, request, abort
 APP = Flask(__name__)
@@ -253,9 +247,9 @@ TOKEN = vPpj7lO3xdOMK18EDDQWR5Bi
 
 @APP.route("/trucks")
 def get_trucks():
-	if request.form.get("token") != TOKEN:
-		abort(401) # unauthorized
-	return ", ".join(get_trucks())
+    if request.form.get("token") != TOKEN:
+        abort(401) # unauthorized
+    return ", ".join(scrape_food_trucks())
 						</code></pre>
 					</section>
 				</section>
