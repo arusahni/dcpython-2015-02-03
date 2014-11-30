@@ -1,8 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # encoding: utf-8
 
+from flask import Flask
 import requests
 from bs4 import BeautifulSoup
+
+import logging
+
+APP = Flask(__name__)
 
 URL = "http://arusahni.net/slack-demo/listing.html"
 
@@ -12,5 +17,9 @@ def scrape_food_trucks():
     trucks = soup.find_all("li")
     return [truck.text for truck in trucks]
 
+@APP.route("/trucks")
+def get_trucks():
+	return ", ".join(scrape_food_trucks())
+
 if __name__ == '__main__':
-    print(scrape_food_trucks())
+	APP.run(debug=True, port=9000)
