@@ -23,7 +23,7 @@ def scrape_food_trucks():
 def get_trucks():
     if TOKEN and request.args.get("token") != TOKEN:
         abort(401) # Unauthorized
-	return ", ".join(scrape_food_trucks())
+    return ", ".join(scrape_food_trucks())
 
 if __name__ == '__main__':
-	APP.run(debug=True, port=9000)
+    APP.run(debug=True, port=9000)
