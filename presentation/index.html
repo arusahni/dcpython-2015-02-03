@@ -196,7 +196,7 @@ def scrape_food_trucks():
 					<p>Integrating with Slack is straightforward.</p>
 					<ol>
 						<li>Slash-command to script</li>
-						<li>Script to Slack</li>
+						<li>Script returns to Slack</li>
 					</ol>
 				</section>
 				<section>
@@ -208,7 +208,7 @@ def scrape_food_trucks():
 						</ul>
 					</section>
 					<section>
-						<h2>Convert the script to a webapp: Boilerplate</h2>
+						<h2>Convert the script to a webservice: Boilerplate</h2>
 						<pre><code>
 from flask import Flask
 
@@ -243,11 +243,11 @@ text=&lt;optional parameters&gt;
 from flask import Flask, request, abort
 APP = Flask(__name__)
 
-TOKEN = vPpj7lO3xdOMK18EDDQWR5Bi
+TOKEN = "vPpj7lO3xdOMK18EDDQWR5Bi"
 
 @APP.route("/trucks")
 def get_trucks():
-    if request.form.get("token") != TOKEN:
+    if request.args.get("token") != TOKEN:
         abort(401) # unauthorized
     return ", ".join(scrape_food_trucks())
 						</code></pre>
@@ -285,6 +285,59 @@ heroku create --http-git
 git push heroku master
 						</code></pre>
 					</section>
+					<section>
+						<h2>Give it a whirl!</h2>
+						<img src="resources/slashcommand-success01.png" alt="A successful whisper." />
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Kinda sorta done</h2>
+						<ul>
+							<li>We've got listings!</li>
+							<li>... but I'm the only one that can see them!</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Incoming webhooks</h2>
+						<ul>
+							<li>Allows for messages to be broadcast to a channel</li>
+							<li>JSON payload to a predetermined URI</li>
+						</ul>
+					</section>
+					<section>
+						<h2>The payload</h2>
+						<pre><code>
+import json
+payload = json.dumps({
+    "text": ','.join(scrape_food_trucks())
+})
+						</code></pre>
+					</section>
+					<section>
+						<h2>Updating our previous service</h2>
+						<pre><code>
+import json
+
+TOKEN = "vPpj7lO3xdOMK18EDDQWR5Bi"
+WEBHOOK_URL = "https://hooks.slack.com/services/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"
+
+@APP.route("/trucks")
+def get_trucks():
+    if request.args.get("token") != TOKEN:
+        abort(401) # unauthorized
+    payload = json.dumps({
+        "text": ','.join(scrape_food_trucks())
+    })
+    resp = requests.post(WEBHOOK_URL, data={"payload": payload})
+    if resp.status_code != 200:
+        return "ERROR - HTTP {}: {}".format(resp.status_code, resp.text)
+    return ""
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>And that's it!</h2>
 				</section>
 				<section>
 					<h1>Questions?</h1>
