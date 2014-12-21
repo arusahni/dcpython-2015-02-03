@@ -101,13 +101,13 @@
 				<section>
 					<h2>A solution</h2>
 					<ol>
-						<li>A developer executes a food truck command within Slack.</li>
-						<li>Slack queries a webservice for food trucks in the area.</li>
-						<li>Slack displays the results in a public channel so others don't have to ask.</li>
+						<li>The user asks Slack for nearby food trucks.</li>
+						<li>Slack queries a webservice for trucks in the area.</li>
+						<li>Slack publicly displays the results (so others don't have to ask).</li>
 					</ol>
 				</section>
 				<section>
-					<h2>Getting a list of food trucks</h2>
+					<h2>Listing food trucks</h2>
 					<p>No formal API available.<br /><br />
 					No problem - scraping to the rescue.</p>
 				</section>
@@ -125,22 +125,22 @@
 				<section>
 					<section>
 						<h2>A custom scraper</h2>
-						<ol>
+						<ul>
 							<li>Python</li>
 							<li><a href="http://docs.python-requests.org/en/latest/">Requests</a></li>
 							<li><a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a></li>
-						</ol>
+						</ul>
 					</section>
 					<section>
                         <h2>Your first request</h2>
-						<pre><code>
+						<pre><code class="python">
 import requests
 
 URL = "http://arusahni.net/slack-demo/listing.html"
 response = requests.get(URL)
+
 # Print the full page markup
 print(response.text)
-
 						</code></pre>
 					</section>
                     <section>
@@ -159,17 +159,19 @@ print(response.text)
                     </section>
                     <section>
                         <h2>Getting fancy</h2>
-                        <pre><code>
+                        <pre><code class="python">
 from bs4 import BeautifulSoup
+
 soup = BeautifulSoup(response.text)
 trucks = soup.find_all("li")
+
 for truck in trucks:
     print(truck.text)
                         </code></pre>
                     </section>
                     <section>
                         <h2>Output</h2>
-                        <pre><code>
+                        <pre><code class="no-highlight">
 District Taco
 Pho-batchi
 Astro Fried Chicken and Dougnuts
@@ -177,7 +179,7 @@ Astro Fried Chicken and Dougnuts
                     </section>
                     <section>
                         <h2>Putting it all together</h2>
-                        <pre><code>
+                        <pre><code class="python">
 import requests
 from bs4 import BeautifulSoup
 
@@ -209,7 +211,7 @@ def scrape_food_trucks():
 					</section>
 					<section>
 						<h2>Convert the script to a webservice: Boilerplate</h2>
-						<pre><code>
+						<pre><code class="python">
 from flask import Flask
 
 APP = Flask(__name__)
@@ -226,20 +228,20 @@ def get_trucks():
 					</section>
 					<section>
 						<h2>Slash-command Payload</h1>
-						<pre><code>
-token=vPpj7lO3xdOMK18EDDQWR5Bi
-team_id=T0001
-channel_id=C2147483705
-channel_name=&lt;name&gt;
-user_id=&lt;user_id&gt;
-user_name=&lt;user_name&gt;
-command=/foodtrucks
-text=&lt;optional parameters&gt;
+						<pre><code class="no-highlight">
+token = vPpj7lO3xdOMK18EDDQWR5Bi
+team_id = T0001
+channel_id = C2147483705
+channel_name = &lt;name&gt;
+user_id = &lt;user_id&gt;
+user_name = &lt;user_name&gt;
+command = /foodtrucks
+text = &lt;optional parameters&gt;
 						</code></pre>
 					</section>
 					<section>
 						<h2>Protect yo' neck</h2>
-						<pre><code>
+						<pre><code class="python">
 from flask import Flask, request, abort
 APP = Flask(__name__)
 
@@ -264,7 +266,7 @@ def get_trucks():
 					</section>
 					<section>
 						<h2>Add pre-requisites</h2>
-						<pre><code>
+						<pre><code class="shell">
 # Install server
 pip install gunicorn
 
@@ -277,7 +279,7 @@ echo "python-3.4.1" > runtime.txt
 					</section>
 					<section>
 						<h2>Get things going</h2>
-						<pre><code>
+						<pre><code class="shell">
 # Instantiate a Heroku project and tie your repo to it
 heroku create --http-git
 
