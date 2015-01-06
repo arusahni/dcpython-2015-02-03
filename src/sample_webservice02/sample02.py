@@ -4,6 +4,7 @@
 """ Sample food truck acquisition webapp, take two """
 
 from flask import Flask, request, abort
+import os
 import json
 import requests
 from bs4 import BeautifulSoup
@@ -13,7 +14,8 @@ APP = Flask(__name__)
 URL = "http://arusahni.net/slack-demo/listing.html"
 
 TOKEN = None # REPLACE THIS WITH YOUR SLACK TOKEN
-WEBHOOK_URL = "https://hooks.slack.com/services/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"
+# WEBHOOK_URL = "https://hooks.slack.com/services/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"
+WEBHOOK_URL = os.environ["SLACK_WEBHOOK_URL"]
 
 def scrape_food_trucks():
     """Acquire food trucks
