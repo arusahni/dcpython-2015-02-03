@@ -35,6 +35,9 @@
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
 		<style>
+		html.bg-image-bottom-left div.slide-background.present {
+			background-position: left bottom;
+		}
 		.reveal .middle-aligned,
 	    .reveal .middle-aligned img	{
 			vertical-align: middle;
@@ -52,7 +55,7 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
+				<section data-background-image="resources/foodtruck-slack.png" data-background-size="200px" data-state="bg-image-bottom-left">
 					<h1>Food Truck Tracking in Slack</h1>
 					<h3>Providing Prescient Postings for Peckish Pythonistas</h3>
 					<p>
@@ -240,7 +243,7 @@ text = &lt;optional parameters&gt;
 						</code></pre>
 					</section>
 					<section>
-						<h2>Protect yo' neck</h2>
+						<h2>Protect ya neck</h2>
 						<pre><code class="python">
 from flask import Flask, request, abort
 APP = Flask(__name__)
@@ -318,9 +321,10 @@ git push heroku master
 						</code></pre>
 					</section>
 					<section>
-						<h2>Updating our previous service</h2>
+						<h2>Updating our service</h2>
 						<pre><code>
 import json
+import requests
 
 TOKEN = "vPpj7lO3xdOMK18EDDQWR5Bi"
 WEBHOOK_URL = "https://hooks.slack.com/services/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"
@@ -343,10 +347,8 @@ def get_trucks():
 				</section>
 				<section>
 					<h1>Fin.</h1>
-					<p><small><a href="http://arusahni.net">Aru Sahni</a> (<a href="http://twitter.com/IAmAru">@IAmAru</a>)</small></p>
-					<ul>
-						<li><a href="http://thehumangeo.com">HumanGeo</a> - We're always looking for talented Python developers.</li>
-					</ul>
+					<p style="margin-bottom: 1.4em;"><small><a href="http://arusahni.net">Aru Sahni</a> (<a href="http://twitter.com/IAmAru">@IAmAru</a>)</small></p>
+					<a href="http://thehumangeo.com"><img src="resources/hglogodark.png" alt="HumanGeo" class="borderless"/></a><br /><small>We're always looking for talented Python developers.</small>
 				</section>
 			</div>
 		</div>
