@@ -68,7 +68,7 @@
 					<ol>
 						<li class="fragment roll-in">Developers need food.</li>
 						<li class="fragment roll-in">Food comes from trucks.</li>
-						<li class="fragment roll-in">Trucks are poorly aggregated.</li>
+						<li class="fragment roll-in">Truck info is poorly aggregated.</li>
 					</ol>
 				</section>
 
@@ -104,15 +104,15 @@
 				<section>
 					<h2>A solution</h2>
 					<ol>
-						<li>The user asks Slack for nearby food trucks.</li>
-						<li>Slack queries a webservice for trucks in the area.</li>
-						<li>Slack publicly displays the results (so others don't have to ask).</li>
+						<li class="fragment roll-in">The user asks Slack for nearby food trucks.</li>
+						<li class="fragment roll-in">Slack queries a webservice for trucks in the area.</li>
+						<li class="fragment roll-in">Slack publicly displays the results (so others don't have to ask).</li>
 					</ol>
 				</section>
 				<section>
 					<h2>Listing food trucks</h2>
-					<p>No formal API available.<br /><br />
-					No problem - scraping to the rescue.</p>
+					<p>No formal API available.</p>
+					<p class="fragment roll-in">No problem - scraping to the rescue.</p>
 				</section>
 				<section>
                     <img src="resources/greendale-thumbs-up.gif" alt="Thumbs up for Greendale!" class="borderless"/>
@@ -120,10 +120,10 @@
 				</section>
 				<section>
 					<h2>Scraping with Python</h2>
-					<ol>
+					<ul>
 						<li>Heavy duty? <a href="http://scrapy.org/">Scrapy</a>.</li>
 						<li>Everything else: Roll your own.</li>
-					</ol>
+					</ul>
 				</section>
 				<section>
 					<section>
@@ -131,7 +131,7 @@
 						<ul>
 							<li>Python</li>
 							<li><a href="http://docs.python-requests.org/en/latest/">Requests</a></li>
-							<li><a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">BeautifulSoup</a></li>
+							<li><a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a></li>
 						</ul>
 					</section>
 					<section>
@@ -139,8 +139,8 @@
 						<pre><code class="python">
 import requests
 
-URL = "http://arusahni.net/slack-demo/listing.html"
-response = requests.get(URL)
+url = "http://arusahni.net/slack-demo/listing.html"
+response = requests.get(url)
 
 # Print the full page markup
 print(response.text)
@@ -198,10 +198,10 @@ def scrape_food_trucks():
 				</section>
 				<section>
 					<h2>Slacking off</h2>
-					<p>Integrating with Slack is straightforward.</p>
+					<p>Integrating with Slack is straightforward...</p>
 					<ol>
-						<li>Slash-command calls script</li>
-						<li>Script pipes output to Slack</li>
+						<li class="fragment roll-in">Slash-command calls script</li>
+						<li class="fragment roll-in">Script pipes output to Slack</li>
 					</ol>
 				</section>
 				<section>
@@ -213,17 +213,18 @@ def scrape_food_trucks():
 						</ul>
 					</section>
 					<section>
-						<h2>Convert the script to a webservice: Boilerplate</h2>
+						<h2>Creating a webservice: Boilerplate</h2>
 						<pre><code class="python">
 from flask import Flask
 
 APP = Flask(__name__)
 
-URL = "http://arusahni.net/slack-demo/listing.html"
+def scrape_food_trucks():
+    # ...
 
 @APP.route("/trucks")
 def get_trucks():
-	return ", ".join(scrape_food_trucks())
+    return ", ".join(scrape_food_trucks())
 						</code></pre>
 					</section>
 					<section>
@@ -296,18 +297,18 @@ git push heroku master
 					</section>
 				</section>
 				<section>
-					<section>
-						<h2>Kinda sorta done</h2>
-						<ul>
-							<li>We've got listings!</li>
-							<li>... but I'm the only one that can see them!</li>
-						</ul>
-					</section>
+					<h2>Kinda sorta done</h2>
+					<ul>
+						<li>We've got listings!</li>
+						<li>... but I'm the only one that can see them!</li>
+					</ul>
+				</section>
+				<section>
 					<section>
 						<h2>Incoming webhooks</h2>
 						<ul>
 							<li>Allow for messages to be broadcast to channels</li>
-							<li>Delivers JSON payload to a predetermined URI</li>
+							<li>Deliver JSON payloads to predetermined URIs</li>
 						</ul>
 					</section>
 					<section>
@@ -316,13 +317,13 @@ git push heroku master
 					</section>
 					<section>
 						<h2>The payload</h2>
-						<pre><code>
-	payload = {"text": ','.join(scrape_food_trucks())}
+						<pre><code class="python">
+	payload = {"text": ', '.join(scrape_food_trucks())}
 						</code></pre>
 					</section>
 					<section>
 						<h2>Updating our service</h2>
-						<pre><code>
+						<pre><code class="python">
 import json
 import requests
 
@@ -333,10 +334,10 @@ WEBHOOK_URL = "https://hooks.slack.com/services/T03393R49/B033DG874/PCnkHoqG6XmP
 def get_trucks():
     if request.args.get("token") != TOKEN:
         abort(401) # unauthorized
-    payload = {"text": ','.join(scrape_food_trucks())}
+    payload = {"text": ', '.join(scrape_food_trucks())}
     resp = requests.post(WEBHOOK_URL, data={"payload": json.dumps(payload)})
     if resp.status_code != 200:
-        return "ERROR - HTTP {}: {}".format(resp.status_code, resp.text), 500
+        return "HTTP {}: {}".format(resp.status_code, resp.text), 500
     return ""
 						</code></pre>
 					</section>
