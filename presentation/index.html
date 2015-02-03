@@ -38,7 +38,7 @@
             background-position: left bottom;
         }
         .reveal .middle-aligned,
-        .reveal .middle-aligned img    {
+        .reveal .middle-aligned img {
             vertical-align: middle;
         }
 
@@ -63,6 +63,16 @@
                 </section>
 
                 <section>
+                    <h2>This talk...</h2>
+                    <ul>
+                        <li class="fragment roll-in">Won't cover: Aggregating truck locations.</li>
+                        <li class="fragment roll-in">Won't cover: Parsing locations from Tweets using NLP.</li>
+                        <li class="fragment roll-in">Won't cover: Using your collection of James Bond gadgets to affix small transponders to moving vehicles at dangerously high speeds.</li>
+                        <li class="fragment roll-in">Will cover: Using Python to connect existing services.</li>
+                    </ul>
+                </section>
+
+                <section>
                     <h2>Problem</h2>
                     <ol>
                         <li class="fragment roll-in">Developers need food.</li>
@@ -75,24 +85,27 @@
                     <h2>Solution?</h2>
                     <p>Food truck tracking sites!</p>
                 </section>
+
                 <section>
                     <h2>Problem</h2>
                     <ul>
-                        <li>They suck.</li>
+                        <li><a href="http://arusahni.net/slack-demo/listing.html">They suck</a>.</li>
                         <li>Many clicks, no deep linking.</li>
-                        <li>Coworkers spend a lot of time independently looking up foodtruck listings.</li>
+                        <li>Coworkers spend a lot of time independently looking up listings.</li>
                     </ul>
                 </section>
+
                 <section>
                     <h2>Slack</h2>
-                    <img src="resources/slack.png" alt="Slack screenshot" class="borderless"/>
+                    <img src="resources/slack-screenshot.jpg" alt="Slack screenshot" class="borderless"/>
                 </section>
+
                 <section>
                     <h2>Slack</h2>
                     <ul>
                         <li>Web-based messaging client.</li>
                         <li>Similar to IRC w/channels.</li>
-                        <li>Collaborative features baked in.</li>
+                        <li>Collaborative features out of the box.</li>
                         <li><strong>All our devs use it.</strong></li>
                         <li><strong>Extensible.</strong></li>
                     </ul>
@@ -199,13 +212,14 @@ def scrape_food_trucks():
                     <h2>Slacking off</h2>
                     <p>Integrating with Slack is straightforward...</p>
                     <ol>
-                        <li class="fragment roll-in">Slash-command calls script</li>
-                        <li class="fragment roll-in">Script pipes output to Slack</li>
+                        <li class="fragment roll-in">Slash-command calls the food truck script.</li>
+                        <li class="fragment roll-in">The script pipes output to Slack.</li>
                     </ol>
                 </section>
                 <section>
                     <section>
                         <h2>Putting the script online</h2>
+                        <p>To be reachable, the script needs to live online.</p>
                         <ul>
                             <li><a href="http://flask.pocoo.org/">Flask</a></li>
                             <li><a href="https://www.heroku.com/">Heroku</a></li>
@@ -278,12 +292,15 @@ pip freeze > requirements.txt
 
 # Specify Python version
 echo "python-3.4.1" > runtime.txt
+
+# Point the server to the app
+echo "web: gunicorn foodtrucks:APP --log-file -" > Procfile
                         </code></pre>
                     </section>
                     <section>
                         <h2>Get things going</h2>
                         <pre><code class="shell">
-# Instantiate a Heroku project and tie your repo to it
+# Instantiate a Heroku project and tie it to your repo
 heroku create --http-git
 
 # Push your master branch to Heroku
@@ -306,8 +323,9 @@ git push heroku master
                     <section>
                         <h2>Incoming webhooks</h2>
                         <ul>
-                            <li>Allow for messages to be broadcast to channels</li>
-                            <li>Deliver JSON payloads to predetermined URIs</li>
+                            <li>Allow external services to push data into Slack.</li>
+                            <li>Deliver JSON payloads to predetermined URIs.</li>
+                            <li>Can be used to broadcast messages to a room.</li>
                         </ul>
                     </section>
                     <section>
@@ -327,7 +345,7 @@ import json
 import requests
 
 TOKEN = "vPpj7lO3xdOMK18EDDQWR5Bi"
-WEBHOOK_URL = "https://hooks.slack.com/services/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"
+WEBHOOK_URL = "https://hooks.slack.com/services/T03...6XmP3cY6J95xt95w"
 
 @APP.route("/trucks")
 def get_trucks():
